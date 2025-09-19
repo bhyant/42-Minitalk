@@ -5,91 +5,66 @@
 #                                                     +:+ +:+         +:+      #
 #    By: tbhuiyan <tbhuiyan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/09/01 11:00:00 by tbhuiyan          #+#    #+#              #
-#    Updated: 2025/09/01 10:35:04 by tbhuiyan         ###   ########.fr        #
+#    Created: 2025/09/19 21:33:25 by tbhuiyan          #+#    #+#              #
+#    Updated: 2025/09/19 21:33:26 by tbhuiyan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# Variables
-NAME_SERVER = server
-NAME_CLIENT = client
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
-RM = rm -f
+NAME_SERVER		= server
+NAME_CLIENT		= client
+CC				= cc
+CFLAGS			= -Wall -Wextra -Werror -MMD -MP -g3
+AR				= ar rc
+RM				= rm -f
 
-# Directories
-SRC_DIR = src
-INC_DIR = includes
-LIBFT_DIR = libft
+OBJDIR			= .objs
+SRC_DIR			= src
+INC_DIR			= includes
+LIBFT_DIR		= libft
 
-# Source files
-SRC_SERVER = $(SRC_DIR)/server.c
-SRC_CLIENT = $(SRC_DIR)/client.c
+SRC_SERVER		= $(SRC_DIR)/server.c
+SRC_CLIENT		= $(SRC_DIR)/client.c
 
-# Object files
-OBJ_SERVER = $(SRC_SERVER:.c=.o)
-OBJ_CLIENT = $(SRC_CLIENT:.c=.o)
+OBJ_SERVER		= $(OBJDIR)/server.o
+OBJ_CLIENT		= $(OBJDIR)/client.o
+DEP_SERVER		= $(OBJDIR)/server.d
+DEP_CLIENT		= $(OBJDIR)/client.d
 
-# Libft
-LIBFT = $(LIBFT_DIR)/libft.a
+LIBFT			= $(LIBFT_DIR)/libft.a
 
-# Colors for output
-RED = \033[0;31m
-GREEN = \033[0;32m
-YELLOW = \033[0;33m
-BLUE = \033[0;34m
-PURPLE = \033[0;35m
-CYAN = \033[0;36m
-WHITE = \033[0;37m
-RESET = \033[0m
+.PHONY: all clean fclean re bonus
 
-# Rules
 all: $(LIBFT) $(NAME_SERVER) $(NAME_CLIENT)
-	@echo "$(GREEN)✅ Minitalk compiled successfully!$(RESET)"
 
 $(LIBFT):
-	@echo "$(YELLOW)🔨 Compiling libft...$(RESET)"
-	@make -C $(LIBFT_DIR) --silent
-	@echo "$(GREEN)✅ Libft compiled!$(RESET)"
+	@make -C $(LIBFT_DIR)
 
 $(NAME_SERVER): $(OBJ_SERVER) $(LIBFT)
-	@echo "$(BLUE)🔗 Linking server...$(RESET)"
 	@$(CC) $(CFLAGS) $(OBJ_SERVER) $(LIBFT) -o $(NAME_SERVER)
-	@echo "$(GREEN)✅ Server created!$(RESET)"
+	@echo "🖥️  Server executable created successfully!"
 
 $(NAME_CLIENT): $(OBJ_CLIENT) $(LIBFT)
-	@echo "$(BLUE)🔗 Linking client...$(RESET)"
 	@$(CC) $(CFLAGS) $(OBJ_CLIENT) $(LIBFT) -o $(NAME_CLIENT)
-	@echo "$(GREEN)✅ Client created!$(RESET)"
+	@echo "💻 Client executable created successfully!"
 
-$(SRC_DIR)/%.o: $(SRC_DIR)/%.c
-	@echo "$(CYAN)🔨 Compiling $<...$(RESET)"
-	@$(CC) $(CFLAGS) -I$(INC_DIR) -I$(LIBFT_DIR) -c $< -o $@
+$(OBJDIR)/%.o: $(SRC_DIR)/%.c | $(OBJDIR)
+	@$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
+
+$(OBJDIR):
+	@mkdir -p $(OBJDIR)
 
 clean:
-	@echo "$(RED)🧹 Cleaning object files...$(RESET)"
-	@$(RM) $(OBJ_SERVER) $(OBJ_CLIENT)
-	@make -C $(LIBFT_DIR) clean --silent
-	@echo "$(GREEN)✅ Object files cleaned!$(RESET)"
+	@$(RM) -r $(OBJDIR)
+	@make -C $(LIBFT_DIR) clean
+	@echo "🧹 Minitalk objects cleaned!"
 
 fclean: clean
-	@echo "$(RED)🗑️  Removing executables...$(RESET)"
 	@$(RM) $(NAME_SERVER) $(NAME_CLIENT)
-	@make -C $(LIBFT_DIR) fclean --silent
-	@echo "$(GREEN)✅ All files cleaned!$(RESET)"
+	@make -C $(LIBFT_DIR) fclean
+	@echo "🗑️  Executables removed!"
 
 re: fclean all
 
 bonus: all
-	@echo "$(PURPLE)✨ Bonus features compiled!$(RESET)"
 
-# Help
-help:
-	@echo "$(CYAN)📖 Available commands:$(RESET)"
-	@echo "  $(GREEN)make$(RESET)        - Compile server and client"
-	@echo "  $(GREEN)make clean$(RESET)  - Remove object files"
-	@echo "  $(GREEN)make fclean$(RESET) - Remove all generated files"
-	@echo "  $(GREEN)make re$(RESET)     - Recompile everything"
-	@echo "  $(GREEN)make test$(RESET)   - Run basic test"
-	@echo "  $(GREEN)make bonus$(RESET)  - Compile with bonus"
-	@echo "  $(GREEN)make help$(RESET)   - Show this help"
+-include $(DEP_SERVER) $(DEP_CLIENT)
