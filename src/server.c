@@ -6,7 +6,7 @@
 /*   By: tbhuiyan <tbhuiyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:18:24 by tbhuiyan          #+#    #+#             */
-/*   Updated: 2025/09/19 21:38:59 by tbhuiyan         ###   ########.fr       */
+/*   Updated: 2025/09/27 17:32:11 by tbhuiyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,12 @@ void	serv_handler(int signum)
 int	main(void)
 {
 	struct sigaction	sa;
+	sigset_t			mask;
 
+	ft_bzero(&mask, sizeof(mask));
 	sa.sa_handler = serv_handler;
 	sa.sa_flags = SA_RESTART | SA_NODEFER;
+	sa.sa_mask = mask;
 	ft_printf("---MINITALK SERVER---\n");
 	ft_printf("server PID is  %d\n", getpid());
 	ft_printf("Waiting for messages...\n\n");

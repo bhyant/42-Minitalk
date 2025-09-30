@@ -6,7 +6,7 @@
 /*   By: tbhuiyan <tbhuiyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:18:26 by tbhuiyan          #+#    #+#             */
-/*   Updated: 2025/09/23 22:44:17 by tbhuiyan         ###   ########.fr       */
+/*   Updated: 2025/09/27 17:28:21 by tbhuiyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	send_pid(pid_t pid)
 		else
 			kill(pid, SIGUSR2);
 		bit_index--;
-		usleep(100);
+		usleep(1000);
 	}
 }
 
@@ -97,7 +97,7 @@ int	main(int ac, char **av)
 	if (ac != 3)
 		return (ft_printf("Wrong number of args !\n"));
 	serv_pid = ft_atoi(av[1]);
-	if (!serv_pid || kill(serv_pid, 0) == -1 || serv_pid == ft_atoi("-1"))
+	if (!serv_pid || kill(serv_pid, 0) == -1 || serv_pid == -1)
 		return (ft_printf("Incorect PID!\n"));
 	signal(SIGUSR1, client_handler);
 	signal(SIGUSR2, client_handler);
