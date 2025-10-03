@@ -6,7 +6,7 @@
 /*   By: tbhuiyan <tbhuiyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:18:24 by tbhuiyan          #+#    #+#             */
-/*   Updated: 2025/09/27 17:32:11 by tbhuiyan         ###   ########.fr       */
+/*   Updated: 2025/10/03 11:15:26 by tbhuiyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ int	recover_message(int signum, unsigned int size)
 	{
 		str = ft_calloc(size + 1, sizeof(unsigned char));
 		if (!str)
+		{
+			ft_printf("\n>>ERROR: MEMORY ALLOCATION FAILED<<\n");
 			exit(0);
+		}
 	}
 	if (build_bits(signum, &str, &i))
 	{

@@ -6,7 +6,7 @@
 /*   By: tbhuiyan <tbhuiyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:18:26 by tbhuiyan          #+#    #+#             */
-/*   Updated: 2025/09/27 17:28:21 by tbhuiyan         ###   ########.fr       */
+/*   Updated: 2025/10/03 11:09:23 by tbhuiyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,10 @@ void	client_handler(int signum)
 		exit(0);
 	}
 	else
+	{
+		ft_printf("\n>>ERROR : SERVER SIGNAL NOT RECEIVED<<\n");
 		exit(0);
+	}
 }
 
 int	main(int ac, char **av)
